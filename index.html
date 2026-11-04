@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- ライト / ダーク両対応 -->
+  <meta name="color-scheme" content="light dark">
+  <title>ImageKomb</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- テーマは描画前に適用するため head 内で読み込む -->
+  <script src="./js/theme.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>ImageKomb</h1>
+    <p class="subtitle">ブラウザ上で完結する画像変換ツール（画像は外部に送信されません）</p>
+  </header>
+
+  <main class="container">
+    <!-- 変換設定 -->
+    <section class="settings" aria-label="変換設定">
+      <!-- テーマ切り替えボタン（パネルの外側すぐ右上に重ねて配置。表示文言は theme.js で設定） -->
+      <button type="button" id="theme-toggle" class="theme-toggle secondary">テーマ切替</button>
+
+      <div class="field">
+        <label for="format">出力形式</label>
+        <select id="format"></select>
+      </div>
+
+      <div class="field" id="quality-field">
+        <label for="quality">品質 <span id="quality-value">90</span></label>
+        <input type="range" id="quality" min="1" max="100" value="90">
+      </div>
+
+      <div class="field" id="background-field">
+        <label for="background">背景色（透過部分）</label>
+        <input type="color" id="background" value="#ffffff">
+      </div>
+    </section>
+
+    <!-- ドラッグアンドドロップ領域 -->
+    <section id="drop-zone" class="drop-zone" tabindex="0" role="button"
+             aria-label="画像ファイルをドロップ、またはクリックして選択">
+      <p class="drop-main">ここに画像をドラッグ＆ドロップ</p>
+      <p class="drop-sub">またはクリックしてファイルを選択（複数可）</p>
+      <p class="drop-formats">BMP / JPEG (jpg, jfif, jif) / PNG / GIF / WebP / AVIF</p>
+      <input type="file" id="file-input" accept="image/*,.jfif,.jif,.jpe" multiple hidden>
+    </section>
+
+    <!-- 変換結果 -->
+    <section class="results" aria-label="変換結果">
+      <div class="results-header">
+        <h2>変換結果 <span id="result-count"></span></h2>
+        <div class="results-actions">
+          <button type="button" id="download-all" disabled>すべてダウンロード</button>
+          <button type="button" id="clear-all" class="secondary" disabled>クリア</button>
+        </div>
+      </div>
+      <ul id="result-list" class="result-list"></ul>
+      <p id="empty-message" class="empty-message">まだ変換した画像はありません。</p>
+    </section>
+  </main>
+
+  <!-- 読み込み順: 変換処理 → 画面制御 -->
+  <script src="./js/converter.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

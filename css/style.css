@@ -1,0 +1,239 @@
+/* ===== 配色（ライト / ダーク切り替え） ===== */
+/* ライトテーマ（既定） */
+:root {
+  color-scheme: light;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #1f2328;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --accent: #2f6feb;
+  --accent-text: #ffffff;
+  --accent-soft: #e8f0fe;
+  --error: #cf222e;
+  --success: #1a7f37;
+}
+
+/* ダークテーマ（theme.js が data-theme="dark" を設定したとき） */
+:root[data-theme="dark"] {
+  /* フォーム部品などブラウザ標準UIもダーク表示にする */
+  color-scheme: dark;
+  --bg: #0d1117;
+  --surface: #161b22;
+  --text: #e6edf3;
+  --muted: #8d96a0;
+  --border: #30363d;
+  --accent: #4493f8;
+  --accent-text: #0d1117;
+  --accent-soft: #1b2a41;
+  --error: #f85149;
+  --success: #3fb950;
+}
+/* JS 無効時（data-theme 未設定）は OS 設定に従う */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #0d1117;
+    --surface: #161b22;
+    --text: #e6edf3;
+    --muted: #8d96a0;
+    --border: #30363d;
+    --accent: #4493f8;
+    --accent-text: #0d1117;
+    --accent-soft: #1b2a41;
+    --error: #f85149;
+    --success: #3fb950;
+  }
+}
+
+/* ===== 基本 ===== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.app-header {
+  text-align: center;
+  padding: 32px 16px 8px;
+}
+.app-header h1 { margin: 0; font-size: 2rem; }
+
+/* テーマ切り替えボタン
+   設定パネルを基準に、パネル外側のすぐ右上へ重ねて配置する。
+   通常の流れから外すため、ボタン分の行が増えず上下に隙間ができない */
+.theme-toggle {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px); /* パネル上端から6px上 */
+  padding: 2px 12px;
+  font-size: 0.85rem;
+}
+.subtitle { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== 設定パネル ===== */
+.settings {
+  position: relative; /* テーマ切り替えボタンの配置基準 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 設定項目をパネル内で中央寄せ */
+  gap: 16px 32px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+/* 設定項目：ラベルと入力部品を1行に横並びで表示 */
+.field {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* ラベルと部品の高さ中央を揃える */
+  gap: 8px;
+}
+.field label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap; /* ラベルが途中で折り返さないようにする */
+}
+.field[hidden] { display: none; }
+
+select, button, input[type="color"] {
+  font: inherit;
+  color: inherit;
+}
+select {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+input[type="color"] {
+  width: 64px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+input[type="range"] { accent-color: var(--accent); }
+
+/* ===== ドロップ領域 ===== */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 48px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.drop-zone:hover,
+.drop-zone:focus-visible,
+.drop-zone.dragover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  outline: none;
+}
+.drop-main { margin: 0; font-size: 1.2rem; font-weight: 600; }
+.drop-sub { margin: 4px 0 0; color: var(--muted); }
+.drop-formats { margin: 12px 0 0; color: var(--muted); font-size: 0.8rem; }
+
+/* ===== 結果一覧 ===== */
+.results-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.results-header h2 { margin: 0; font-size: 1.1rem; }
+.results-actions { display: flex; gap: 8px; }
+
+button {
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+button.secondary { background: transparent; color: var(--text); border-color: var(--border); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.result-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.result-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 6px;
+  /* 透過が分かるようにチェック柄の背景 */
+  background: repeating-conic-gradient(#8884 0% 25%, transparent 0% 50%) 50% / 12px 12px;
+}
+.info { min-width: 0; }
+.file-name {
+  margin: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-meta { margin: 0; font-size: 0.8rem; color: var(--muted); }
+.status-error { color: var(--error); }
+.status-ok { color: var(--success); }
+
+.item-actions { display: flex; gap: 6px; }
+.item-actions a {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.empty-message { color: var(--muted); text-align: center; margin: 16px 0; }
+.empty-message[hidden] { display: none; }
+
+/* 画面幅が狭いとサブタイトルとテーマ切り替えボタンが重なるため、
+   ボタン分の余白をパネル上に確保する */
+@media (max-width: 800px) {
+  .container { padding-top: 48px; }
+}
+
+/* 狭い画面ではボタンを下段へ */
+@media (max-width: 520px) {
+  .result-item { grid-template-columns: 48px 1fr; }
+  .thumb { width: 48px; height: 48px; }
+  .item-actions { grid-column: 1 / -1; justify-content: flex-end; }
+}
