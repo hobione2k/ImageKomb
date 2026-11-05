@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- ライト / ダーク両対応 -->
   <meta name="color-scheme" content="light dark">
+  <!--
+    コンテンツセキュリティポリシー（CSP）
+    画像を外部に送信しないことをブラウザ側で保証するため、通信・フォーム送信を禁止する。
+      default-src 'self'     : 読み込みは同一オリジンのファイルのみ許可
+      img-src 'self' blob:   : 変換前後の画像（blob: URL）の表示を許可
+      connect-src 'none'     : fetch / XHR / WebSocket / sendBeacon 等の通信をすべて禁止
+      form-action 'none'     : フォーム送信を禁止
+      object-src 'none'      : プラグイン埋め込みを禁止
+      base-uri 'none'        : <base> による相対パスの書き換えを禁止
+  -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' blob:; connect-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'">
   <title>ImageKomb</title>
   <link rel="stylesheet" href="./css/style.css">
   <!-- テーマは描画前に適用するため head 内で読み込む -->
