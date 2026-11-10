@@ -24,16 +24,18 @@
 </head>
 <body>
   <header class="app-header">
-    <h1>ImageKomb</h1>
+    <!-- タイトル行（タイトルを中央、テーマ切り替えボタンを右端に配置） -->
+    <div class="title-row">
+      <h1>ImageKomb</h1>
+      <!-- テーマ切り替えボタン（表示文言は theme.js で設定） -->
+      <button type="button" id="theme-toggle" class="theme-toggle secondary">テーマ切替</button>
+    </div>
     <p class="subtitle">ブラウザ上で完結する画像変換ツール（画像は外部に送信されません）</p>
   </header>
 
   <main class="container">
     <!-- 変換設定 -->
     <section class="settings" aria-label="変換設定">
-      <!-- テーマ切り替えボタン（パネルの外側すぐ右上に重ねて配置。表示文言は theme.js で設定） -->
-      <button type="button" id="theme-toggle" class="theme-toggle secondary">テーマ切替</button>
-
       <div class="field">
         <label for="format">出力形式</label>
         <select id="format"></select>
@@ -53,7 +55,11 @@
     <!-- ドラッグアンドドロップ領域 -->
     <section id="drop-zone" class="drop-zone" tabindex="0" role="button"
              aria-label="画像ファイルをドロップ、またはクリックして選択">
-      <p class="drop-main">ここに画像をドラッグ＆ドロップ</p>
+      <!-- 見出し文言（PC はドラッグ＆ドロップ、スマホはファイル選択の文言を CSS で出し分け） -->
+      <p class="drop-main">
+        <span class="drop-main-pc">ここに画像をドラッグ＆ドロップ</span>
+        <span class="drop-main-sp">ファイルを選択</span>
+      </p>
       <p class="drop-sub">またはクリックしてファイルを選択（複数可）</p>
       <p class="drop-formats">BMP / JPEG (jpg, jfif, jif) / PNG / GIF / WebP / AVIF</p>
       <input type="file" id="file-input" accept="image/*,.jfif,.jif,.jpe" multiple hidden>

@@ -67,16 +67,27 @@ body {
 }
 .app-header h1 { margin: 0; font-size: 2rem; }
 
-/* テーマ切り替えボタン
-   設定パネルを基準に、パネル外側のすぐ右上へ重ねて配置する。
-   通常の流れから外すため、ボタン分の行が増えず上下に隙間ができない */
+/* タイトル行
+   左右を同じ幅の列にしてタイトルを中央に保ち、右列の右端にテーマ切り替えボタンを置く。
+   横幅はメインコンテンツ（.container の内側）と揃える */
+.title-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  max-width: 848px; /* .container の max-width 880px − 左右 padding 16px×2 */
+  margin: 0 auto;
+}
+.title-row h1 { grid-column: 2; }
+
+/* テーマ切り替えボタン：タイトル行の右端に配置 */
 .theme-toggle {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 6px); /* パネル上端から6px上 */
+  grid-column: 3;
+  justify-self: end;
   padding: 2px 12px;
   font-size: 0.85rem;
 }
+/* アイコンと文言の間隔 */
+.theme-toggle-icon + .theme-toggle-label { margin-left: 0.3em; }
 .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
 
 /* フッター：リポジトリ・ライセンスへのリンクを中央寄せで表示 */
@@ -105,7 +116,6 @@ body {
 
 /* ===== 設定パネル ===== */
 .settings {
-  position: relative; /* テーマ切り替えボタンの配置基準 */
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* 設定項目をパネル内で中央寄せ */
@@ -231,8 +241,13 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 .status-ok { color: var(--success); }
 
 .item-actions { display: flex; gap: 6px; }
+/* 個別ダウンロードボタン（アイコンのみ）：アイコンを中央に置いた正方形のボタン */
 .item-actions a {
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   background: var(--accent);
   color: var(--accent-text);
@@ -244,15 +259,21 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 .empty-message { color: var(--muted); text-align: center; margin: 16px 0; }
 .empty-message[hidden] { display: none; }
 
-/* 画面幅が狭いとサブタイトルとテーマ切り替えボタンが重なるため、
-   ボタン分の余白をパネル上に確保する */
-@media (max-width: 800px) {
-  .container { padding-top: 48px; }
-}
+/* ドロップ領域の見出し：通常は PC 用の文言のみ表示 */
+.drop-main-sp { display: none; }
 
-/* 狭い画面ではボタンを下段へ */
+/* 狭い画面（スマホ）向けの調整 */
 @media (max-width: 520px) {
-  .result-item { grid-template-columns: 48px 1fr; }
+  /* スマホではドラッグ＆ドロップしないため、ファイル選択の文言に切り替える */
+  .drop-main-pc { display: none; }
+  .drop-main-sp { display: inline; }
+  /* 見出しと重複するため「またはクリックしてファイルを選択」の補足文は隠す */
+  .drop-sub { display: none; }
+  /* テーマ切り替えボタンはアイコンのみ表示（文言は aria-label / title で補う） */
+  .theme-toggle-label { display: none; }
+  .theme-toggle { padding: 2px 8px; }
+
+  /* ダウンロードボタンはアイコンのみで幅を取らないため、スマホでも同じ行の右端に置く */
+  .result-item { grid-template-columns: 48px 1fr auto; }
   .thumb { width: 48px; height: 48px; }
-  .item-actions { grid-column: 1 / -1; justify-content: flex-end; }
 }

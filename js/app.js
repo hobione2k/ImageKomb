@@ -204,8 +204,34 @@
     const link = document.createElement('a');
     link.href = url;
     link.download = result.name;
-    link.textContent = 'ダウンロード';
+    link.className = 'download-link';
+    // アイコンのみのボタンのため、読み上げ用ラベルとツールチップで用途を示す
+    link.setAttribute('aria-label', `${result.name} をダウンロード`);
+    link.title = 'ダウンロード';
+    link.appendChild(createDownloadIcon());
     li.querySelector('.item-actions').appendChild(link);
+  }
+
+  /** ダウンロードアイコン（下向き矢印＋受け皿）の SVG 要素を作る */
+  function createDownloadIcon() {
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', '18');
+    svg.setAttribute('height', '18');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor'); // リンクの文字色に合わせる
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    // 矢印の軸・矢じり・受け皿の3本の線
+    ['M12 4v11', 'M7 10l5 5 5-5', 'M5 20h14'].forEach((d) => {
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      svg.appendChild(path);
+    });
+    return svg;
   }
 
   /** 変換失敗時の表示に更新する */

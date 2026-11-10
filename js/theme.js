@@ -49,7 +49,17 @@
     /** ボタンの表示を現在のテーマに合わせて更新 */
     function updateButton() {
       const isDark = root.getAttribute('data-theme') === 'dark';
-      button.textContent = isDark ? '☀ ライト' : '🌙 ダーク';
+      // アイコンと文言を別要素にし、スマホでは CSS で文言を隠してアイコンのみ表示する
+      button.innerHTML = '';
+      const icon = document.createElement('span');
+      icon.className = 'theme-toggle-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = isDark ? '☀' : '🌙';
+      const label = document.createElement('span');
+      label.className = 'theme-toggle-label';
+      label.textContent = isDark ? 'ライト' : 'ダーク';
+      button.append(icon, label);
+      button.title = isDark ? 'ライトテーマに切り替え' : 'ダークテーマに切り替え';
       button.setAttribute('aria-label', isDark ? 'ライトテーマに切り替え' : 'ダークテーマに切り替え');
       button.setAttribute('aria-pressed', String(isDark));
     }
